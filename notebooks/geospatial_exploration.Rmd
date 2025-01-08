@@ -52,7 +52,8 @@ burglaries_geo <- st_as_sf(
 ```{r}
 burg_zips <- st_join(burglaries_geo, dc_shape, join = st_within, left = FALSE)
 burg_zips <- burg_zips |>
-  select('primary_key', 'incident_number', 'incident_occurred', 'incident_reported', 'geometry', 'TRACTCE':'NAMELSAD', 'ALAND':'INTPTLON')
+  select('primary_key', 'incident_number', 'incident_occurred', 'incident_reported', 'geometry', 'TRACTCE':'NAMELSAD', 'ALAND':'INTPTLON') |>
+  rename('tract'='TRACTCE')
 ```
 
 ### Part 2 - Exploratory Analysis
@@ -61,10 +62,11 @@ Now, merge in the census data. **Note:** Make sure that the final dataset contai
 
 ```{r}
 census <- read_csv('../data/census.csv')
+census
 ```
 
 ```{r}
-
+left_join(burg_zips, census, by = 'tract')
 ```
 
 Perform some exploratory analysis on your prepared dataset.
